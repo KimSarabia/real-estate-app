@@ -1,27 +1,25 @@
-'use strict';
+
+'use strict'
 
 const PORT = process.env.PORT || 3333;
 
 var express = require('express');
+var path = require('path');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var http = require('http');
-var path = require('path');
 
 var app = express();
+
 app.use(morgan('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', function(req, res) {
-  var indexPath = path.join(__dirname, 'index.html');
-  res.sendFile(indexPath);
-})
-
-app.use('/banking', require('./routes/banking'));
+app.use('/homes', require('./routes/homes'));
 
 var server = http.createServer(app);
+
 server.listen(PORT, function() {
   console.log(`Server listening on port ${PORT}`);
-})
+});
